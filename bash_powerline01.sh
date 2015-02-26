@@ -5,6 +5,7 @@ __powerline() {
     readonly SEGMENT_SEPARATOR='⮀'
     readonly GIT_BRANCH_SYMBOL='⭠ '
     readonly GIT_BRANCH_CHANGED_SYMBOL='✚'
+    readonly GIT_BRANCH_COMMIT_SYMBOL='●'
     readonly GIT_NEED_PUSH_SYMBOL='⬆'
     readonly GIT_NEED_PULL_SYMBOL='⬇'
 
