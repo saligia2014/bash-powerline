@@ -8,7 +8,7 @@ __powerline() {
     readonly FG_GREEN="\[$(tput setaf 2)\]"
     readonly FG_YELLOW="\[$(tput setaf 3)\]"
     readonly FG_BLUE="\[$(tput setaf 4)\]"
-    readonly FG_PURPLE="\[$(tput setaf 5)\]"
+    readonly FG_MAGENTA="\[$(tput setaf 5)\]"
     readonly FG_CYAN="\[$(tput setaf 6)\]"
     readonly FG_WHITE="\[$(tput setaf 7)\]"
     
@@ -17,7 +17,7 @@ __powerline() {
     readonly BG_GREEN="\[$(tput setab 2)\]"
     readonly BG_YELLOW="\[$(tput setab 3)\]"
     readonly BG_BLUE="\[$(tput setab 4)\]"
-    readonly BG_PURPLE="\[$(tput setab 5)\]"
+    readonly BG_MAGENTA="\[$(tput setab 5)\]"
     readonly BG_CYAN="\[$(tput setab 6)\]"
     readonly BG_WHITE="\[$(tput setab 7)\]"
 

@@ -7,7 +7,7 @@ __powerline() {
     readonly FG_GREEN="\[$(tput setaf 2)\]"
     readonly FG_YELLOW="\[$(tput setaf 3)\]"
     readonly FG_BLUE="\[$(tput setaf 4)\]"
-    readonly FG_PURPLE="\[$(tput setaf 5)\]"
+    readonly FG_MAGENTA="\[$(tput setaf 5)\]"
     readonly FG_CYAN="\[$(tput setaf 6)\]"
     readonly FG_WHITE="\[$(tput setaf 7)\]"
     
@@ -16,7 +16,7 @@ __powerline() {
     readonly BG_GREEN="\[$(tput setab 2)\]"
     readonly BG_YELLOW="\[$(tput setab 3)\]"
     readonly BG_BLUE="\[$(tput setab 4)\]"
-    readonly BG_PURPLE="\[$(tput setab 5)\]"
+    readonly BG_MAGENTA="\[$(tput setab 5)\]"
     readonly BG_CYAN="\[$(tput setab 6)\]"
     readonly BG_WHITE="\[$(tput setab 7)\]"
 
@@ -29,7 +29,7 @@ __powerline() {
     readonly GIT_PROMPT_SYMBOL_BRANCH='➦'
     readonly GIT_PROMPT_SYMBOL_ADD="${FG_WHITE}Ⓐ ${RESET}"
     readonly GIT_PROMPT_SYMBOL_DELETE="${FG_RED}Ⓓ ${RESET}"
-    readonly GIT_PROMPT_SYMBOL_MODIFY="${FG_PURPLE}Ⓜ ${RESET}"
+    readonly GIT_PROMPT_SYMBOL_MODIFY="${FG_MAGENTA}Ⓜ ${RESET}"
     readonly GIT_PROMPT_SYMBOL_RENAME="${FG_CYAN}Ⓡ ${RESET}"
     readonly GIT_PROMPT_SYMBOL_COMMIT="${FG_YELLOW}Ⓒ ${RESET}"
     readonly GIT_PROMPT_SYMBOL_PUSH="⬆"
@@ -100,7 +100,7 @@ __powerline() {
 
     ps1() {
         local RETVAL=$?
-        local PROMPT_SYMBOL_DATE="${FG_PURPLE}"`date "+%Y-%m-%d %H:%M:%S %A"`"$RESET"
+        local PROMPT_SYMBOL_DATE="${FG_MAGENTA}"`date "+%Y-%m-%d %H:%M:%S %A"`"$RESET"
         local PROMPT_SYMBOL_DIR="${FG_BLUE}\w$RESET"
         local PROMPT_USER_HOST_COLOR="${FG_GREEN}"
         local PROMPT_USER_HOST="\u${SYSTEM_PROMPT_SYMBOL_AT}\h"
