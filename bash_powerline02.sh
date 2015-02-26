@@ -104,9 +104,10 @@ __powerline() {
         local PROMPT_SYMBOL_DIR="${FG_BLUE}\w$RESET"
         local PROMPT_USER_HOST_COLOR="${FG_GREEN}"
         local PROMPT_USER_HOST="\u${SYSTEM_PROMPT_SYMBOL_AT}\h"
-        [[ $UID -eq 0 ]] && \
-            PROMPT_USER_HOST_COLOR="${FG_YELLOW}" \
+        if [ $UID -eq 0 ]; then
+            PROMPT_USER_HOST_COLOR="${FG_YELLOW}"
             PROMPT_USER_HOST="${SYSTEM_PROMPT_SYMBOL_ROOT} ${PROMPT_USER_HOST}"
+        fi
         local PROMPT_SYMBOL
         [[ $(jobs -l | wc -l) -gt 0 ]] && PROMPT_SYMBOL+="${FG_CYAN}${SYSTEM_PROMPT_SYMBOL_JOBS} "
         [[ $RETVAL -ne 0 ]] && PROMPT_SYMBOL+="${FG_RED}${SYSTEM_PROMPT_SYMBOL_FALSE} ${RESET}"

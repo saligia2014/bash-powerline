@@ -1,78 +1,121 @@
 #!/usr/bin/env bash
 
 __powerline() {
-    # Unicode symbols
-    readonly SEGMENT_SEPARATOR='⮀'
-    readonly GIT_BRANCH_SYMBOL='⭠ '
-    readonly GIT_BRANCH_CHANGED_SYMBOL='✚'
-    readonly GIT_BRANCH_COMMIT_SYMBOL='●'
-    readonly GIT_NEED_PUSH_SYMBOL='⬆'
-    readonly GIT_NEED_PULL_SYMBOL='⬇'
 
     # colorscheme
-    readonly FG_Black="\[$(tput setaf 0)\]"
-    readonly FG_Red="\[$(tput setaf 1)\]"
-    readonly FG_Green="\[$(tput setaf 2)\]"
-    readonly FG_Yellow="\[$(tput setaf 3)\]"
-    readonly FG_Violet="\[$(tput setaf 4)\]"
-    readonly FG_Magenta="\[$(tput setaf 5)\]"
-    readonly FG_Cyan="\[$(tput setaf 6)\]"
-    readonly FG_White="\[$(tput setaf 7)\]"
-
-    readonly BG_Black="\[$(tput setab 0)\]"
-    readonly BG_Red="\[$(tput setab 1)\]"
-    readonly BG_Green="\[$(tput setab 2)\]"
-    readonly BG_Yellow="\[$(tput setab 3)\]"
-    readonly BG_Violet="\[$(tput setab 4)\]"
-    readonly BG_Magenta="\[$(tput setab 5)\]"
-    readonly BG_Cyan="\[$(tput setab 6)\]"
-    readonly BG_White="\[$(tput setab 7)\]"
+    readonly FG_BLACK="\[$(tput setaf 0)\]"
+    readonly FG_RED="\[$(tput setaf 1)\]"
+    readonly FG_GREEN="\[$(tput setaf 2)\]"
+    readonly FG_YELLOW="\[$(tput setaf 3)\]"
+    readonly FG_BLUE="\[$(tput setaf 4)\]"
+    readonly FG_PURPLE="\[$(tput setaf 5)\]"
+    readonly FG_CYAN="\[$(tput setaf 6)\]"
+    readonly FG_WHITE="\[$(tput setaf 7)\]"
+    
+    readonly BG_BLACK="\[$(tput setab 0)\]"
+    readonly BG_RED="\[$(tput setab 1)\]"
+    readonly BG_GREEN="\[$(tput setab 2)\]"
+    readonly BG_YELLOW="\[$(tput setab 3)\]"
+    readonly BG_BLUE="\[$(tput setab 4)\]"
+    readonly BG_PURPLE="\[$(tput setab 5)\]"
+    readonly BG_CYAN="\[$(tput setab 6)\]"
+    readonly BG_WHITE="\[$(tput setab 7)\]"
 
     readonly DIM="\[$(tput dim)\]"
     readonly REVERSE="\[$(tput rev)\]"
     readonly RESET="\[$(tput sgr0)\]"
     readonly BOLD="\[$(tput bold)\]"
 
+    # Unicode symbols
+    readonly GIT_PROMPT_SYMBOL_BRANCH='⭠ '
+    readonly GIT_PROMPT_SYMBOL_ADD="Ⓐ "
+    readonly GIT_PROMPT_SYMBOL_DELETE="Ⓓ "
+    readonly GIT_PROMPT_SYMBOL_MODIFY="Ⓜ "
+    readonly GIT_PROMPT_SYMBOL_RENAME="Ⓡ "
+    readonly GIT_PROMPT_SYMBOL_COMMIT="Ⓒ "
+    readonly GIT_PROMPT_SYMBOL_PUSH="⬆"
+    readonly GIT_PROMPT_SYMBOL_PULL="⬇"
+
+    readonly SYSTEM_PROMPT_SYMBOL_SEPARATOR='⮀'
+    readonly SYSTEM_PROMPT_SYMBOL_TRUE='✔'
+    readonly SYSTEM_PROMPT_SYMBOL_FALSE='✘'
+    readonly SYSTEM_PROMPT_SYMBOL_JOBS='⚙'
+    readonly SYSTEM_PROMPT_SYMBOL_ROOT='⚡'
+    readonly SYSTEM_PROMPT_SYMBOL_AT='@'
+    readonly SYSTEM_PROMPT_SYMBOL_USER='➜'
+
     __git_info() { 
-        [ -x "$(which git)" ] || return    # git not found
+        
+        if [ ! -x "$(which git)" ]; then
+            printf "${FG_BLUE}${SYSTEM_PROMPT_SYMBOL_SEPARATOR}${RESET}" 
+            return # git not found
+        fi
 
         # get current branch name or short SHA1 hash for detached head
-        local branch="$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --always 2>/dev/null)"
-        [ -n "$branch" ] || return  # git branch not found
+        local BRANCH="$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --always 2>/dev/null)"
+        if [ ! -n "$BRANCH" ]; then
+            printf "${FG_BLUE}${SYSTEM_PROMPT_SYMBOL_SEPARATOR}${RESET}"
+            return # git branch not found
+        fi
+        
+        local INDEX=$(command git status --porcelain -b 2> /dev/null)
+        local STATUS=""
+        local GIT_PROMPT_SYMBOL
 
-        local marks
-        local BG_COLOR="$BG_Green"
-        local FG_COLOR="$FG_Green"
-
-        # branch is modified?
-        [ -n "$(git status --porcelain)" ] && marks+=" $GIT_BRANCH_CHANGED_SYMBOL"
-
-        # how many commits local branch is ahead/behind of remote?
-        local stat="$(git status --porcelain --branch | grep '^##' | grep -o '\[.\+\]$')"
+        local stat="$(echo $INDEX | grep '^##' | grep -o '\[.\+\]$')"
         local aheadN="$(echo $stat | grep -o 'ahead \d\+' | grep -o '\d\+')"
         local behindN="$(echo $stat | grep -o 'behind \d\+' | grep -o '\d\+')"
-        [ -n "$aheadN" ] && marks+=" $GIT_NEED_PUSH_SYMBOL $aheadN"
-        [ -n "$behindN" ] && marks+=" $GIT_NEED_PULL_SYMBOL $behindN"
 
-        # print the git branch segment without a trailing newline
-        [[ -n $marks ]] && BG_COLOR="$BG_Yellow" && FG_COLOR="$FG_Yellow"
-        printf "$BG_COLOR$FG_Violet$SEGMENT_SEPARATOR $FG_Black$GIT_BRANCH_SYMBOL$branch$marks $RESET$FG_COLOR$SEGMENT_SEPARATOR$RESET"
+        if [ -n "$behindN" ]; then
+             STATUS="$GIT_PROMPT_SYMBOL_PULL $behindN$STATUS"
+        fi
+        if [ -n "$aheadN" ]; then
+             STATUS="$GIT_PROMPT_SYMBOL_PUSH $aheadN$STATUS"
+        fi
+        if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_COMMIT$STATUS"
+        elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_COMMIT$STATUS"
+        fi
+        if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_RENAME$STATUS"
+        fi
+        if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_MODIFY$STATUS"
+        elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_MODIFY$STATUS"
+        elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_MODIFY$STATUS"
+        fi
+        if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_DELETE$STATUS"
+        elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_DELETE$STATUS"
+        elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_DELETE$STATUS"
+        fi
+        if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
+            STATUS="$GIT_PROMPT_SYMBOL_ADD$STATUS"
+        fi
+        
+        if [ -n "${STATUS}" ]; then
+            GIT_PROMPT_SYMBOL="${BG_YELLOW}${FG_BLUE}${SYSTEM_PROMPT_SYMBOL_SEPARATOR} ${FG_BLACK}${GIT_PROMPT_SYMBOL_BRANCH}${BRANCH} ${STATUS} ${RESET}${FG_YELLOW}${SYSTEM_PROMPT_SYMBOL_SEPARATOR}${RESET}"
+        else
+            GIT_PROMPT_SYMBOL="${BG_GREEN}${FG_BLUE}${SYSTEM_PROMPT_SYMBOL_SEPARATOR} ${FG_BLACK}${GIT_PROMPT_SYMBOL_BRANCH}${BRANCH} ${RESET}${FG_GREEN}${SYSTEM_PROMPT_SYMBOL_SEPARATOR}${RESET}"
+        fi
+        printf "${GIT_PROMPT_SYMBOL}"
     }
 
     ps1() {
         local RETVAL=$?
-        # Check the exit code of the previous command and display different
-        # colors in the prompt accordingly.
-        local Symbols 
-        local Dir_Separator
-        [[ $RETVAL -ne 0 ]] && Symbols+="$FG_Red ✘"
-        [[ $UID -eq 0 ]] && Symbols+="$FG_Yellow ⚡"
-        [[ $(jobs -l | wc -l) -gt 0 ]] && Symbols+="$FG_Cyan ⚙"
-        [[ $UID -eq 0 ]] && Symbols+="$FG_Yellow \u@\h"
-        [[ -n $Symbols ]] && Symbols="$BG_Black$Symbols $RESET$BG_Violet$FG_Black$SEGMENT_SEPARATOR$RESET"
-        PSdir="$BG_Violet$FG_Black \w $RESET"
-        [[ !(-n $(__git_info)) ]] && Dir_Separator="$FG_Violet$SEGMENT_SEPARATOR$RESET"
-        PS1="$Symbols$PSdir$Dir_Separator$(__git_info) "
+        local PROMPT_SYMBOL
+        local PROMPT_SYMBOL_DIR="${BG_BLUE}${FG_BLACK} \w ${RESET}"
+
+        [[ $RETVAL -ne 0 ]] && PROMPT_SYMBOL+="${BG_BLACK}${FG_RED}${SYSTEM_PROMPT_SYMBOL_FALSE} ${RESET}"
+        [[ $(jobs -l | wc -l) -gt 0 ]] && PROMPT_SYMBOL+="${BG_BLACK}${FG_CYAN}${SYSTEM_PROMPT_SYMBOL_JOBS} ${RESET}"
+        [[ $UID -eq 0 ]] && PROMPT_SYMBOL+="${BG_BLACK}${FG_YELLOW}${SYSTEM_PROMPT_SYMBOL_ROOT} \u${SYSTEM_PROMPT_SYMBOL_AT}\h ${RESET}"
+        [[ -n "${PROMPT_SYMBOL}" ]] && PROMPT_SYMBOL="${BG_BLACK} ${PROMPT_SYMBOL}${BG_BLUE}${FG_BLACK}${SYSTEM_PROMPT_SYMBOL_SEPARATOR}${RESET}"
+        PS1="${PROMPT_SYMBOL}${PROMPT_SYMBOL_DIR}$(__git_info) "
     }
 
     PROMPT_COMMAND=ps1
