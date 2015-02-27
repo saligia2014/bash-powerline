@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 __powerline() {
-
     # colorscheme
     readonly FG_BLACK="\[$(tput setaf 0)\]"
     readonly FG_RED="\[$(tput setaf 1)\]"
