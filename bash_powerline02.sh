@@ -105,7 +105,7 @@ __powerline() {
         local PROMPT_USER_HOST_COLOR="${FG_GREEN}"
         local PROMPT_USER_HOST="\u${SYSTEM_PROMPT_SYMBOL_AT}\h"
         if [ $UID -eq 0 ]; then
-            PROMPT_USER_HOST_COLOR="${FG_YELLOW}"
+            PROMPT_USER_HOST_COLOR="${FG_CYAN}"
             PROMPT_USER_HOST="${SYSTEM_PROMPT_SYMBOL_ROOT} ${PROMPT_USER_HOST}"
         fi
         local PROMPT_SYMBOL
