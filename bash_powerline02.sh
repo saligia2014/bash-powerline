@@ -91,9 +91,9 @@ __powerline() {
         fi
 
         if [ -n "${STATUS}" ]; then
-            GIT_PROMPT_SYMBOL="${FG_YELLOW}git ${GIT_PROMPT_SYMBOL_BRANCH} (${BRANCH} ${RESET}${STATUS}${FG_YELLOW})${RESET} "
+            GIT_PROMPT_SYMBOL="${FG_YELLOW}git${GIT_PROMPT_SYMBOL_BRANCH}(${BRANCH} ${RESET}${STATUS}${FG_YELLOW})${RESET} "
         else
-            GIT_PROMPT_SYMBOL="${FG_GREEN}git ${GIT_PROMPT_SYMBOL_BRANCH} (${BRANCH}) ${RESET}"
+            GIT_PROMPT_SYMBOL="${FG_GREEN}git${GIT_PROMPT_SYMBOL_BRANCH}(${BRANCH}) ${RESET}"
         fi
         printf "${GIT_PROMPT_SYMBOL}"
     }
