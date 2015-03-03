@@ -12,8 +12,7 @@ powerline by bash
 
 <h2>bash_powerline02</h2>
 
-<img src="https://raw.githubusercontent.com/saligia2014/bash-powerline/master/images-folder/bash_powerline02.jpg" style="max-width:100%;" />
-
+<img src="https://raw.githubusercontent.com/saligia2014/bash-powerline/master/images-folder/bash_powerline02.png" style="max-width:100%;" />
 
 
 <h3><a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bash:</h3>
