@@ -7,7 +7,7 @@ powerline by bash
 
 <h3>Menlo-Powerline.otf 字体补丁</h3>
 
-<img src="https://raw.githubusercontent.com/saligia2014/bash-powerline/master/images-folder/bash-powerline01.jpg" style="max-width:100%;" />
+<img src="https://raw.githubusercontent.com/saligia2014/bash-powerline/master/images-folder/bash-powerline01.png" style="max-width:100%;" />
 
 
 <h2>bash_powerline02</h2>
