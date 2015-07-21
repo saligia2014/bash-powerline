@@ -91,9 +91,9 @@ __powerline() {
         fi
 
         if [ -n "${STATUS}" ]; then
-            GIT_PROMPT_SYMBOL="${FG_YELLOW}git${GIT_PROMPT_SYMBOL_BRANCH}(${BRANCH} ${RESET}${STATUS}${FG_YELLOW})${RESET} "
+            GIT_PROMPT_SYMBOL="${FG_YELLOW}git ${GIT_PROMPT_SYMBOL_BRANCH} (${BRANCH} ${RESET}${STATUS}${FG_YELLOW})${RESET} "
         else
-            GIT_PROMPT_SYMBOL="${FG_GREEN}git${GIT_PROMPT_SYMBOL_BRANCH}(${BRANCH}) ${RESET}"
+            GIT_PROMPT_SYMBOL="${FG_GREEN}git ${GIT_PROMPT_SYMBOL_BRANCH} (${BRANCH}) ${RESET}"
         fi
         printf "${GIT_PROMPT_SYMBOL}"
     }
@@ -106,7 +106,7 @@ __powerline() {
         local PROMPT_USER_HOST="\u${SYSTEM_PROMPT_SYMBOL_AT}\h"
         if [ $UID -eq 0 ]; then
             PROMPT_USER_HOST_COLOR="${FG_CYAN}"
-            PROMPT_USER_HOST="${SYSTEM_PROMPT_SYMBOL_ROOT}─${PROMPT_USER_HOST}"
+            PROMPT_USER_HOST="${SYSTEM_PROMPT_SYMBOL_ROOT} ─${PROMPT_USER_HOST}"
         fi
         local PROMPT_SYMBOL
         [[ $(jobs -l | wc -l) -gt 0 ]] && PROMPT_SYMBOL+="${PROMPT_USER_HOST_COLOR}${SYSTEM_PROMPT_SYMBOL_JOBS}─${RESET}"
